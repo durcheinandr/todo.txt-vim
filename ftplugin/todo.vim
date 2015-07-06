@@ -72,10 +72,24 @@ function! TodoTxtToggleComplete()
     endif
 endfunction
 
+" from https://github.com/dbeniamine/todo.txt-vim/blob/master/ftplugin/todo.vim
 function! TodoTxtSortDue()
-    :silent! %s/\(due:\d\{4}\)-\(\d\{2}\)-\(\d\{2}\)/\1\2\3/g
-    :sort n /due:/
-    :silent! %s/\(due:\d\{4}\)\(\d\{2}\)/\1-\2-/g
+    silent! %s/\([dD][uU][eE]:\d\{4}\)-\(\d\{2}\)-\(\d\{2}\)/\1\2\3/g
+    " Sort adding entries with due dates add the beginning
+    sort n /[dD][uU][eE]:/
+    " Count the number of lines
+    silent normal gg
+    execute "/[dD][uU][eE]:"
+    let l:first=getpos(".")[1]
+    silent normal N
+    let l:last=getpos(".")[1]
+    let l:diff=l:last-l:first+1
+    " Put the sorted lines at the beginning of the file TODO: make this an option
+    "execute ':'.l:first
+    "execute ':d'.l:diff
+    "silent normal gg
+    "silent normal P
+    "silent! %s/\([dD][uU][eE]:\d\{4}\)\(\d\{2}\)/\1-\2-/g
     " TODO: add time sorting (YYYY-MM-DD HH:MM)
 endfunction
 
